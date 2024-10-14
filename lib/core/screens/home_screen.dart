@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:personal_financial_management/core/constants/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -20,7 +21,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: signUserOut,
-            icon: const Icon(Icons.logout),
+            icon: const Icon(
+              Icons.logout,
+              color: AppColors.realWhiteColor,
+            ),
           )
         ],
       ),

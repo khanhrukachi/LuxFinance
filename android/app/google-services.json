@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:423333058295:android:ba36d999d63d1b7ac825f2",
+        "mobilesdk_app_id": "1:423333058295:android:5b3f048d3125749bc825f2",
         "android_client_info": {
           "package_name": "com.example.personal_financial_management"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "423333058295-nq0j4tcl5n5t450ichrtjlrq08v2e2q4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.personal_financial_management",
+            "certificate_hash": "3e417a3b6c6495c4ae99f62c01f2a23478394841"
+          }
+        },
+        {
+          "client_id": "423333058295-qnu1eb9fbuuu4d4np6dutg3nv5q6hqe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAeXPo4CTj_w0yDqqYlcrwxOtco5YFZLG0"
@@ -20,7 +33,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423333058295-qnu1eb9fbuuu4d4np6dutg3nv5q6hqe7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "423333058295-9dm3728qoke32gqf5d519innmr0dssie.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.personalFinancialManagement"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423333058295:android:ba36d999d63d1b7ac825f2",
+        "android_client_info": {
+          "package_name": "om.example.personal_financi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423333058295-dolt30mjg6vadnuqpq1chinr9oa9edik.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "om.example.personal_financi",
+            "certificate_hash": "3e417a3b6c6495c4ae99f62c01f2a23478394841"
+          }
+        },
+        {
+          "client_id": "423333058295-qnu1eb9fbuuu4d4np6dutg3nv5q6hqe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeXPo4CTj_w0yDqqYlcrwxOtco5YFZLG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423333058295-qnu1eb9fbuuu4d4np6dutg3nv5q6hqe7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "423333058295-9dm3728qoke32gqf5d519innmr0dssie.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.personalFinancialManagement"
+              }
+            }
+          ]
         }
       }
     }

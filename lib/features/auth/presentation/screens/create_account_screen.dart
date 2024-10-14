@@ -7,6 +7,8 @@ import 'package:personal_financial_management/core/screens/loading_screen.dart';
 import 'package:personal_financial_management/core/widgets/my_button_widget.dart';
 import 'package:personal_financial_management/core/widgets/my_textfield_widget.dart';
 import 'package:personal_financial_management/core/widgets/square_title_widget.dart';
+import 'package:personal_financial_management/features/auth/providers/AuthService.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final Function()? onTap;
@@ -43,7 +45,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     final String password = passwordController.text.trim();
 
     if (!isValidEmail(email)) {
-      Navigator.pop(context); // Đóng Loading nếu email không hợp lệ
+      Navigator.pop(context);
       wrongMessage('Emails are not formatted correctly!');
       return;
     }
@@ -68,7 +70,63 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
+  Future<void> signInWithGoogle(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const LoadingScreen();
+      },
+    );
 
+    try {
+      await AuthService().SignInWithGoogle();
+      Navigator.of(context).pop();
+    } catch (e) {
+      wrongMessage('Google Sign-In failed. Please try again.');
+      print("Error signing in with Google: $e");
+    } finally {
+      if (Navigator.canPop(context)) {
+        Navigator.of(context).pop();
+      }
+    }
+  }
+
+  Future<void> signInWithApple(BuildContext context) async {
+    // Show loading screen
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const LoadingScreen();
+      },
+    );
+
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: 'com.example.personal_financial_management',
+          redirectUri: Uri.parse('https://luxfinance-93617.firebaseapp.com/__/auth/handler'),
+        ),
+      );
+
+      final credential = OAuthProvider("apple.com").credential(
+        accessToken: appleCredential.authorizationCode,
+        idToken: appleCredential.identityToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.pop(context);
+    } catch (e) {
+      Navigator.pop(context);
+      wrongMessage('Apple Sign-In failed. Please try again.');
+      print("Error signing in with Apple: $e");
+    }
+  }
 
 
 // Adjusted message functions
@@ -188,14 +246,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SquareTitleWidget(
+                            onTap: () => signInWithGoogle(context),
                             imagePath: AppImages.logoGoogle,
                           ),
-                          SizedBox(width: 25),
+                          const SizedBox(width: 25),
                           SquareTitleWidget(
+                            onTap: () => signInWithApple(context),
                             imagePath: AppImages.logoApple,
                           ),
                         ],
@@ -208,7 +268,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           const SizedBox(width: 4),
                           GestureDetector(
                             onTap: widget.onTap,
-                            child: Text(
+                            child: const Text(
                               'Login now',
                               style: TextStyle(
                                   color: AppColors.blueColor,

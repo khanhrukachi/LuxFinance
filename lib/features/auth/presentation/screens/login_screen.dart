@@ -7,6 +7,8 @@ import 'package:personal_financial_management/core/screens/loading_screen.dart';
 import 'package:personal_financial_management/core/widgets/my_button_widget.dart';
 import 'package:personal_financial_management/core/widgets/my_textfield_widget.dart';
 import 'package:personal_financial_management/core/widgets/square_title_widget.dart';
+import 'package:personal_financial_management/features/auth/providers/AuthService.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function()? onTap;
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password,
       );
       Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       Navigator.pop(context);
       wrongMessage('Your account is incorrect!');
     } catch (e) {
@@ -59,7 +61,63 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-// Adjusted message functions
+  Future<void> signInWithGoogle(BuildContext context) async {
+    // Show loading screen
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const LoadingScreen();
+      },
+    );
+    try {
+      await AuthService().SignInWithGoogle();
+      Navigator.of(context).pop();
+    } catch (e) {
+      Navigator.of(context).pop();
+      wrongMessage('Google Sign-In failed. Please try again.');
+      print("Error signing in with Google: $e");
+    }
+  }
+
+  Future<void> signInWithApple(BuildContext context) async {
+    // Hiển thị màn hình loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const LoadingScreen();
+      },
+    );
+
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: 'com.example.personalFinancialManagement',
+          redirectUri: Uri.parse('https://luxfinance-93617.firebaseapp.com/__/auth/handler'),
+        ),
+      );
+
+      final credential = OAuthProvider("apple.com").credential(
+        accessToken: appleCredential.authorizationCode,
+        idToken: appleCredential.identityToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.pop(context);
+    } catch (e) {
+      Navigator.pop(context);
+      wrongMessage('Apple Sign-In failed. Please try again.');
+      print("Error signing in with Apple: $e");
+    }
+  }
+
+
+  // Adjusted message functions
   void wrongMessage(String message) {
     final snackBar = SnackBar(
       content: Text(
@@ -122,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 10),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
+                        EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -141,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 50),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
+                        EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
                         child: Row(
                           children: [
                             Expanded(
@@ -170,14 +228,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SquareTitleWidget(
+                            onTap: () => signInWithGoogle(context),
                             imagePath: AppImages.logoGoogle,
                           ),
-                          SizedBox(width: 25),
+                          const SizedBox(width: 25),
                           SquareTitleWidget(
+                            onTap: () => signInWithApple(context),
                             imagePath: AppImages.logoApple,
                           ),
                         ],

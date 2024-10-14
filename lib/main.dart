@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_financial_management/config/routers/routes.dart';
+import 'package:personal_financial_management/config/themes/app_theme.dart';
 import 'package:personal_financial_management/features/auth/presentation/screens/auth_screen.dart';
 import 'package:personal_financial_management/features/auth/presentation/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,9 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Financial Management',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: AppTheme.appTheme(),
       home: const AuthScreen(),
       onGenerateRoute: Routes.onGenerateRoute,
     );
