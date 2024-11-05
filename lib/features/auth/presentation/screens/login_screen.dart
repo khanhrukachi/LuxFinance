@@ -62,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
-    // Show loading screen
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -81,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithApple(BuildContext context) async {
-    // Hiển thị màn hình loading
     showDialog(
       context: context,
       barrierDismissible: false,

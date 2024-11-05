@@ -6,4 +6,5 @@ class AppSizes {
   static const double large = 20.0;
   static const double xLarge = 24.0;
   static const double xxLarge = 32.0;
+  static const double xxxLarge = 32.0;
 }
