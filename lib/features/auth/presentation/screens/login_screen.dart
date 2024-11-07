@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:personal_financial_management/core/constants/app_colors.dart';
 import 'package:personal_financial_management/core/constants/app_image.dart';
 import 'package:personal_financial_management/core/constants/app_sizes.dart';
 import 'package:personal_financial_management/core/screens/loading_screen.dart';
+import 'package:personal_financial_management/core/utils/utils.dart';
 import 'package:personal_financial_management/core/widgets/my_button_widget.dart';
 import 'package:personal_financial_management/core/widgets/my_textfield_widget.dart';
 import 'package:personal_financial_management/core/widgets/square_title_widget.dart';
-import 'package:personal_financial_management/features/auth/providers/AuthService.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:personal_financial_management/features/auth/presentation/futures/future_signin_with_apple.dart';
+import 'package:personal_financial_management/features/auth/presentation/futures/future_signin_with_google.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function()? onTap;
@@ -20,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // text editing controller
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -42,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!isValidEmail(email)) {
       Navigator.pop(context);
-      wrongMessage('Emails are not formatted correctly!');
+      wrongMessage('Emails are not formatted correctly!', context);
       return;
     }
 
@@ -51,87 +54,16 @@ class _LoginScreenState extends State<LoginScreen> {
         email: email,
         password: password,
       );
+
       Navigator.pop(context);
-    } on FirebaseAuthException {
+
+    } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      wrongMessage('Your account is incorrect!');
+      wrongMessage('Your account is incorrect!', context);
     } catch (e) {
       Navigator.pop(context);
-      wrongMessage('An unexpected error occurred. Please try again later!');
+      wrongMessage('An unexpected error occurred. Please try again later!', context);
     }
-  }
-
-  Future<void> signInWithGoogle(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const LoadingScreen();
-      },
-    );
-    try {
-      await AuthService().SignInWithGoogle();
-      Navigator.of(context).pop();
-    } catch (e) {
-      Navigator.of(context).pop();
-      wrongMessage('Google Sign-In failed. Please try again.');
-      print("Error signing in with Google: $e");
-    }
-  }
-
-  Future<void> signInWithApple(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const LoadingScreen();
-      },
-    );
-
-    try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.example.personalFinancialManagement',
-          redirectUri: Uri.parse('https://luxfinance-93617.firebaseapp.com/__/auth/handler'),
-        ),
-      );
-
-      final credential = OAuthProvider("apple.com").credential(
-        accessToken: appleCredential.authorizationCode,
-        idToken: appleCredential.identityToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pop(context);
-    } catch (e) {
-      Navigator.pop(context);
-      wrongMessage('Apple Sign-In failed. Please try again.');
-      print("Error signing in with Apple: $e");
-    }
-  }
-
-
-  // Adjusted message functions
-  void wrongMessage(String message) {
-    final snackBar = SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: AppSizes.medium,
-          color: AppColors.whiteColor,
-        ),
-      ),
-      backgroundColor: AppColors.redColor,
-      duration: const Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override

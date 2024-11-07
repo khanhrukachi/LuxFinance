@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:personal_financial_management/core/constants/app_colors.dart';
 import 'package:personal_financial_management/core/constants/app_image.dart';
 import 'package:personal_financial_management/core/constants/app_sizes.dart';
+import 'package:personal_financial_management/core/constants/firebase_collection_names.dart';
 import 'package:personal_financial_management/core/screens/loading_screen.dart';
+import 'package:personal_financial_management/core/utils/utils.dart';
 import 'package:personal_financial_management/core/widgets/my_button_widget.dart';
 import 'package:personal_financial_management/core/widgets/my_textfield_widget.dart';
 import 'package:personal_financial_management/core/widgets/square_title_widget.dart';
-import 'package:personal_financial_management/features/auth/providers/AuthService.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:personal_financial_management/features/auth/presentation/futures/future_signin_with_apple.dart';
+import 'package:personal_financial_management/features/auth/presentation/futures/future_signin_with_google.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final Function()? onTap;
@@ -21,7 +24,6 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  // text editing controller
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -32,10 +34,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return regex.hasMatch(email);
   }
 
-  Future<void> signUserUp() async {
-    // Hiển thị màn hình Loading
+  Future<void> signUserUp(BuildContext context) async {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return const LoadingScreen();
       },
@@ -46,107 +48,48 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
     if (!isValidEmail(email)) {
       Navigator.pop(context);
-      wrongMessage('Emails are not formatted correctly!');
+      wrongMessage('Email is not formatted correctly!', context);
       return;
     }
 
     try {
-      if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      if (password == confirmPasswordController.text.trim()) {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+
+        final randomFullName = generateRandomId(16);
+
+        // Save user data to Firestore
+        await FirebaseFirestore.instance
+            .collection(FirebaseCollectionNames.users)
+            .doc(credential.user!.uid)
+            .set({
+          'fullName': randomFullName,
+          'email': email,
+          'profilePicUrl': '',
+        });
+
+        await credential.user!.sendEmailVerification();
+
         Navigator.pop(context);
+
       } else {
         Navigator.pop(context);
-        wrongMessage("Passwords don't match!");
+        wrongMessage("Passwords don't match!", context);
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      wrongMessage('Firebase Error: ${e.message}');
+      wrongMessage('Firebase Error: ${e.message}', context);
     } catch (e) {
       Navigator.pop(context);
-      wrongMessage('An unexpected error occurred. Please try again later!');
-    }
-  }
-
-  Future<void> signInWithGoogle(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const LoadingScreen();
-      },
-    );
-
-    try {
-      await AuthService().SignInWithGoogle();
-      Navigator.of(context).pop();
-    } catch (e) {
-      wrongMessage('Google Sign-In failed. Please try again.');
-      print("Error signing in with Google: $e");
-    } finally {
-      if (Navigator.canPop(context)) {
-        Navigator.of(context).pop();
-      }
-    }
-  }
-
-  Future<void> signInWithApple(BuildContext context) async {
-    // Show loading screen
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return const LoadingScreen();
-      },
-    );
-
-    try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.example.personal_financial_management',
-          redirectUri: Uri.parse('https://luxfinance-93617.firebaseapp.com/__/auth/handler'),
-        ),
-      );
-
-      final credential = OAuthProvider("apple.com").credential(
-        accessToken: appleCredential.authorizationCode,
-        idToken: appleCredential.identityToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pop(context);
-    } catch (e) {
-      Navigator.pop(context);
-      wrongMessage('Apple Sign-In failed. Please try again.');
-      print("Error signing in with Apple: $e");
+      wrongMessage('An unexpected error occurred. Please try again later!', context);
     }
   }
 
 
-// Adjusted message functions
-  void wrongMessage(String message) {
-    final snackBar = SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: AppSizes.medium,
-          color: AppColors.whiteColor,
-        ),
-      ),
-      backgroundColor: AppColors.redColor,
-      duration: const Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-    );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +141,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       const SizedBox(height: 10),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
+                        EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -211,13 +154,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       const SizedBox(height: 25),
                       MyButton(
-                        onTap: signUserUp,
+                        onTap: () => signUserUp(context),
                         text: 'Sign Up',
                       ),
                       const SizedBox(height: 50),
                       const Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
+                        EdgeInsets.symmetric(horizontal: AppSizes.xLarge),
                         child: Row(
                           children: [
                             Expanded(

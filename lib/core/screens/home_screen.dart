@@ -41,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.whiteColor,
         elevation: 0,
-        title: _buildFacebookText(),
+        title: _buildLuxFinance(),
       ),
       body: TabBarView(
         controller: _tabController,
-        physics: const NeverScrollableScrollPhysics(), // Disable swipe gestures
+        physics: const NeverScrollableScrollPhysics(),
         children: Constants.screens,
       ),
       bottomNavigationBar: Container(
@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildFacebookText() => const Text(
+
+  Widget _buildLuxFinance() => const Text(
     'LuxFinance',
     style: TextStyle(
       color: AppColors.blackColor,
