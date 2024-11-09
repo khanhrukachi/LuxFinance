@@ -36,6 +36,5 @@ Future<void> signInWithApple(BuildContext context) async {
   } catch (e) {
     Navigator.pop(context);
     wrongMessage('Apple Sign-In failed. Please try again.', context);
-    print("Error signing in with Apple: $e");
   }
 }

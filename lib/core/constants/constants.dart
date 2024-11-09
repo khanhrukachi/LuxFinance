@@ -26,27 +26,27 @@ class Constants {
       Tab(
         icon: Icon(
           index == 0 ? Icons.home : Icons.home_outlined,
-          color: AppColors.darkLightGreyColor,
-          size: AppSizes.xxxLarge,
+          color: AppColors.darkGreyColor,
+          size: AppSizes.xxLarge,
         ),
       ),
       Tab(
         icon: Icon(
           index == 1 ? Icons.book : Icons.book_outlined,
-          color: AppColors.darkLightGreyColor,
-          size: AppSizes.xxxLarge,
+          color: AppColors.darkGreyColor,
+          size: AppSizes.xxLarge,
         ),
       ),
       Tab(
         icon: PreferredSize(
-          preferredSize: const Size.fromRadius(AppSizes.xxxLarge),
+          preferredSize: const Size.fromRadius(AppSizes.xxxLarge*2),
           child: CircleAvatar(
             backgroundColor: Colors.green,
-            radius: AppSizes.xxxLarge,
+            radius: AppSizes.xxxLarge*2,
             child: Icon(
               index == 2 ? Icons.add : Icons.add_outlined,
-              color: index == 2 ? AppColors.realWhiteColor : AppColors.darkLightGreyColor,
-              size: AppSizes.xxxLarge * 0.7,
+              color: AppColors.realWhiteColor,
+              size: AppSizes.xxxLarge * 0.8,
             ),
           ),
         ),
@@ -54,15 +54,15 @@ class Constants {
       Tab(
         icon: Icon(
           index == 3 ? Icons.temple_buddhist : Icons.temple_buddhist_outlined,
-          color:  AppColors.darkLightGreyColor,
-          size: AppSizes.xxxLarge,
+          color:  AppColors.darkGreyColor,
+          size: AppSizes.xxLarge,
         ),
       ),
       Tab(
         icon: Icon(
           index == 4 ? Icons.account_circle : Icons.account_circle_outlined,
-          color: AppColors.darkLightGreyColor,
-          size: AppSizes.xxxLarge,
+          color: AppColors.darkGreyColor,
+          size: AppSizes.xxLarge,
         ),
       ),
     ];

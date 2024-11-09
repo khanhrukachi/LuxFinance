@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:personal_financial_management/core/screens/error_screen.dart';
 import 'package:personal_financial_management/core/screens/home_screen.dart';
 import 'package:personal_financial_management/features/add/presentation/screens/add_screen.dart';
+import 'package:personal_financial_management/features/auth/presentation/screens/edit_profile_screen.dart';
 import 'package:personal_financial_management/features/auth/presentation/screens/email_verification_screen.dart';
+import 'package:personal_financial_management/features/auth/presentation/screens/introduce_screen.dart';
 import 'package:personal_financial_management/features/auth/presentation/screens/profile_screen.dart';
 import 'package:personal_financial_management/features/budget/presentation/screens/budget_screen.dart';
 import 'package:personal_financial_management/features/over/presentation/screens/over_screen.dart';
@@ -18,6 +20,14 @@ class Routes {
       case ProfileScreen.routeName:
         return _cupertinoRoute(
           ProfileScreen(),
+        );
+      case EditProfileScreen.routeName:
+        return _cupertinoRoute(
+          const EditProfileScreen(),
+        );
+      case IntroduceScreen.routeName:
+        return _cupertinoRoute(
+          const IntroduceScreen(),
         );
       case BudgetScreen.routeName:
         return _cupertinoRoute(

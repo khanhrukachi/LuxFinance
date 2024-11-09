@@ -36,7 +36,7 @@ Future<void> signInWithGoogle(BuildContext context) async {
     if (currentUser != null && currentUser.email == googleUser.email) {
       if (!currentUser.providerData.any((provider) => provider.providerId == 'google.com')) {
         await currentUser.linkWithCredential(googleCredential);
-        wrongMessage('Google account linked successfully.', context);
+        successMessage('Google account linked successfully.', context);
       } else {
         wrongMessage('Google account already linked.', context);
       }

@@ -15,15 +15,24 @@ class AppTheme {
   // AppBar theme
   static AppBarTheme appBarTheme() {
     return const AppBarTheme(
-      // Đặt màu nền cho AppBar
-      backgroundColor: AppColors.blackColor,
-      elevation: 0,
+      // Set background color for AppBar
+      backgroundColor: AppColors.whiteColor,
+      elevation: 4, // Subtle shadow for polished look
+      shadowColor: Colors.grey, // Shadow color for the bottom divider effect
       iconTheme: IconThemeData(
-        // Màu của các biểu tượng trong AppBar
         color: AppColors.whiteColor,
+      ),
+      toolbarTextStyle: TextStyle(
+        color: AppColors.whiteColor, // Text color of the toolbar
+      ),
+      titleTextStyle: TextStyle(
+        color: AppColors.blackColor, // Title text color
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
     );
   }
+
 
   // Button theme
   static ButtonThemeData buttonTheme() {

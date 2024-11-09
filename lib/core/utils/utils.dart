@@ -31,6 +31,26 @@ void wrongMessage(String message, BuildContext context) {
   );
 }
 
+void successMessage(String message, BuildContext context) {
+  ScaffoldMessenger.of(context).clearSnackBars();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: AppSizes.medium,
+          color: AppColors.whiteColor,
+        ),
+      ),
+      backgroundColor: AppColors.greenColor,
+      duration: const Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+
+
 void showToastMessage({
   required String text,
 }) {

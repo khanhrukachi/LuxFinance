@@ -13,6 +13,7 @@ class AppColors {
   static const lightBlueColor = Color(0xFF0064E0);
   static const darkBlueColor = Color(0xFF0E62C6);
   static const loginScreenColor = Color(0xFF171E2E);
+  static const greenColor = Color(0xFF01CE4C);
   static const redColor = Color(0xFFFF0000);
 
 

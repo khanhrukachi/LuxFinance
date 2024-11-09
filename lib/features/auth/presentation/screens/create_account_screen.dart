@@ -61,7 +61,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
         final randomFullName = generateRandomId(16);
 
-        // Save user data to Firestore
         await FirebaseFirestore.instance
             .collection(FirebaseCollectionNames.users)
             .doc(credential.user!.uid)
