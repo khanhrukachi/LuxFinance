@@ -79,11 +79,19 @@ class _InputWalletPageState extends State<InputWalletPage> {
                 const SizedBox(height: 30),
                 customButton(
                   action: () async {
-                    await SpendingFirebase.addWalletMoney(int.parse(
-                        _moneyController.text
-                            .replaceAll(RegExp(r'[^0-9]'), '')));
-                    if (!mounted) return;
-                    Navigator.pushReplacementNamed(context, '/main');
+                    // Safe parsing using tryParse
+                    final cleanedText = _moneyController.text.replaceAll(RegExp(r'[^0-9]'), '');
+                    final int? parsedValue = int.tryParse(cleanedText);
+
+                    if (parsedValue != null) {
+                      await SpendingFirebase.addWalletMoney(parsedValue);
+                      if (!mounted) return;
+                      Navigator.pushReplacementNamed(context, '/main');
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Invalid input. Please enter a valid amount.')),
+                      );
+                    }
                   },
                   text: "OK",
                 ),
