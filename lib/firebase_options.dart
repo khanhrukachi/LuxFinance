@@ -41,49 +41,52 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCcA4kyXhUvt-VSpAW4K9jJlojT3DBl5XQ',
-    appId: '1:423333058295:web:d9fb74ffcd20eb0cc825f2',
-    messagingSenderId: '423333058295',
-    projectId: 'luxfinance-93617',
-    authDomain: 'luxfinance-93617.firebaseapp.com',
-    storageBucket: 'luxfinance-93617.appspot.com',
-    measurementId: 'G-1Z8BZ02KXR',
+    apiKey: 'AIzaSyDrtWdrfml91qyKOn1b7rxiBuTm-EMjCyk',
+    appId: '1:955499126701:web:2fd2359abc9bcf47ff0b24',
+    messagingSenderId: '955499126701',
+    projectId: 'facebook-clone-9f92c',
+    authDomain: 'facebook-clone-9f92c.firebaseapp.com',
+    storageBucket: 'facebook-clone-9f92c.appspot.com',
+    measurementId: 'G-KGR63WMR29',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAeXPo4CTj_w0yDqqYlcrwxOtco5YFZLG0',
-    appId: '1:423333058295:android:6ff7f440da92ad4dc825f2',
-    messagingSenderId: '423333058295',
-    projectId: 'luxfinance-93617',
-    storageBucket: 'luxfinance-93617.appspot.com',
+    apiKey: 'AIzaSyAE_VDMcxzmjK-ZU_DCX2jowGW9u_TApVc',
+    appId: '1:955499126701:android:61ce9ba02a7d501dff0b24',
+    messagingSenderId: '955499126701',
+    projectId: 'facebook-clone-9f92c',
+    storageBucket: 'facebook-clone-9f92c.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB3cP2OGaYZP96Dpxb9RjJz48Jq0xVHfEk',
-    appId: '1:423333058295:ios:fccf846ecdbaafb3c825f2',
-    messagingSenderId: '423333058295',
-    projectId: 'luxfinance-93617',
-    storageBucket: 'luxfinance-93617.appspot.com',
+    apiKey: 'AIzaSyA2DLRtmYBcYfOFxxPZXOBl2stF6_NVthM',
+    appId: '1:955499126701:ios:1e27040b3c890c98ff0b24',
+    messagingSenderId: '955499126701',
+    projectId: 'facebook-clone-9f92c',
+    storageBucket: 'facebook-clone-9f92c.appspot.com',
+    androidClientId: '955499126701-vj9qdf0lc2inr76j5qll7qognesr0q73.apps.googleusercontent.com',
+    iosClientId: '955499126701-8kvgtcmo3pamqt1up435bvck06bkrpfv.apps.googleusercontent.com',
     iosBundleId: 'com.example.personalFinancialManagement',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB3cP2OGaYZP96Dpxb9RjJz48Jq0xVHfEk',
-    appId: '1:423333058295:ios:fccf846ecdbaafb3c825f2',
-    messagingSenderId: '423333058295',
-    projectId: 'luxfinance-93617',
-    storageBucket: 'luxfinance-93617.appspot.com',
+    apiKey: 'AIzaSyA2DLRtmYBcYfOFxxPZXOBl2stF6_NVthM',
+    appId: '1:955499126701:ios:1e27040b3c890c98ff0b24',
+    messagingSenderId: '955499126701',
+    projectId: 'facebook-clone-9f92c',
+    storageBucket: 'facebook-clone-9f92c.appspot.com',
+    androidClientId: '955499126701-vj9qdf0lc2inr76j5qll7qognesr0q73.apps.googleusercontent.com',
+    iosClientId: '955499126701-8kvgtcmo3pamqt1up435bvck06bkrpfv.apps.googleusercontent.com',
     iosBundleId: 'com.example.personalFinancialManagement',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCcA4kyXhUvt-VSpAW4K9jJlojT3DBl5XQ',
-    appId: '1:423333058295:web:2af5a1b078119b4bc825f2',
-    messagingSenderId: '423333058295',
-    projectId: 'luxfinance-93617',
-    authDomain: 'luxfinance-93617.firebaseapp.com',
-    storageBucket: 'luxfinance-93617.appspot.com',
-    measurementId: 'G-TWW3P7V1NN',
+    apiKey: 'AIzaSyDrtWdrfml91qyKOn1b7rxiBuTm-EMjCyk',
+    appId: '1:955499126701:web:e814d33bf63269ceff0b24',
+    messagingSenderId: '955499126701',
+    projectId: 'facebook-clone-9f92c',
+    authDomain: 'facebook-clone-9f92c.firebaseapp.com',
+    storageBucket: 'facebook-clone-9f92c.appspot.com',
+    measurementId: 'G-GSN6H100ZD',
   );
-
 }

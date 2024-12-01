@@ -1,56 +1,114 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_financial_management/config/routers/routes.dart';
-import 'package:personal_financial_management/core/screens/loading_screen.dart';
-import 'package:personal_financial_management/features/auth/presentation/screens/email_verification_screen.dart';
-import 'package:personal_financial_management/features/auth/presentation/screens/login_or_create_account_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal_financial_management/core/constants/app_colors.dart';
+import 'package:personal_financial_management/features/forgot/forgot_page.dart';
+import 'package:personal_financial_management/features/forgot/success_page.dart';
+import 'package:personal_financial_management/features/login/login_page.dart';
+import 'package:personal_financial_management/features/main/home/home_page.dart';
+import 'package:personal_financial_management/features/main/main_page.dart';
+import 'package:personal_financial_management/features/onboarding/onboarding_page.dart';
+import 'package:personal_financial_management/features/setting/bloc/setting_cubit.dart';
+import 'package:personal_financial_management/features/setting/bloc/setting_state.dart';
+import 'package:personal_financial_management/features/setting/localization/app_localizations_setup.dart';
+import 'package:personal_financial_management/features/signup/verify/input_wallet.dart';
+import 'package:personal_financial_management/features/signup/verify/verify_page.dart';
+import 'package:personal_financial_management/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '/config/themes/app_theme.dart';
-import '/core/screens/home_screen.dart';
-import 'firebase_options.dart';
+bool loginMethod = false;
+int? language;
+bool isDark = false;
+bool isFirstStart = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    const ProviderScope(
-      child: MainApp(),
-    ),
-  );
+  final prefs = await SharedPreferences.getInstance();
+  language = prefs.getInt('language');
+  isDark = prefs.getBool("isDark") ?? false;
+  isFirstStart = prefs.getBool("firstStart") ?? true;
+  loginMethod = prefs.getBool("login") ?? false;
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.appTheme(),
-      debugShowCheckedModeBanner: false,
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingScreen();
-          }
-
-          if (snapshot.hasData) {
-            final user = snapshot.data;
-            if (user!.emailVerified) {
-              return const HomeScreen();
-            } else {
-              return const EmailVerificationScreen();
-            }
-          }
-
-          return  const LoginOrCreateAccountScreen();
-        },
-      ),
-      onGenerateRoute: Routes.onGenerateRoute,
+    SharedPreferences.getInstance().then((value) {
+      value.setBool("firstStart", false);
+    });
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SettingCubit>(
+          create: (_) => SettingCubit(language: language, isDark: isDark),
+        ),
+      ],
+      child: BlocBuilder<SettingCubit, SettingState>(
+          buildWhen: (previous, current) => previous != current,
+          builder: (_, settingState) {
+            return MaterialApp(
+              supportedLocales: AppLocalizationsSetup.supportedLocales,
+              localizationsDelegates:
+              AppLocalizationsSetup.localizationsDelegates,
+              localeResolutionCallback:
+              AppLocalizationsSetup.localeResolutionCallback,
+              locale: settingState.locale,
+              debugShowCheckedModeBanner: false,
+              title: 'Spending Management',
+              theme: settingState.isDark
+                  ? ThemeData(
+                brightness: Brightness.dark,
+                primarySwatch: Colors.blue,
+              )
+                  : ThemeData(
+                cardColor: Colors.white,
+                colorScheme:
+                const ColorScheme.light(background: Colors.white),
+                brightness: Brightness.light,
+                primarySwatch: Colors.blue,
+                scaffoldBackgroundColor: AppColors.whisperBackground,
+                bottomAppBarTheme:
+                BottomAppBarTheme(color: AppColors.whisperBackground),
+                floatingActionButtonTheme:
+                const FloatingActionButtonThemeData(
+                  backgroundColor: Color.fromRGBO(121, 158, 84, 1),
+                ),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: AppColors.whisperBackground,
+                  iconTheme: const IconThemeData(color: Colors.black),
+                  titleTextStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                primaryColor: const Color.fromRGBO(242, 243, 247, 1),
+              ),
+              initialRoute: FirebaseAuth.instance.currentUser == null
+                  ? (isFirstStart ? "/" : "/login")
+                  : loginMethod
+                  ? (FirebaseAuth.instance.currentUser!.emailVerified
+                  ? '/main'
+                  : '/verify')
+                  : '/main',
+              routes: {
+                '/': (context) => const OnBoardingPage(),
+                '/login': (context) => const LoginPage(),
+                '/home': (context) => const HomePage(),
+                '/main': (context) => const MainPage(),
+                '/forgot': (context) => const ForgotPage(),
+                '/success': (context) => const SuccessPage(),
+                '/verify': (context) => const VerifyPage(),
+                '/wallet': (context) => const InputWalletPage(),
+              },
+            );
+          }),
     );
   }
 }
