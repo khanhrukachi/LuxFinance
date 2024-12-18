@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class TabBarType extends StatelessWidget {
   const TabBarType({Key? key, required this.controller}) : super(key: key);

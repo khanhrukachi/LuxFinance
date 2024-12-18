@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_financial_management/features/setting/bloc/setting_cubit.dart';
-import 'package:personal_financial_management/features/setting/bloc/setting_state.dart';
+import 'package:personal_financial_management/setting/bloc/setting_cubit.dart';
+import 'package:personal_financial_management/setting/bloc/setting_state.dart';
 import 'package:personal_financial_management/models/spending.dart';
 import 'package:table_calendar/table_calendar.dart';
 

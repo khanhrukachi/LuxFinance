@@ -6,7 +6,7 @@ import 'package:personal_financial_management/core/constants/app_colors.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/features/signup/verify/input_wallet.dart';
 
 class VerifyPage extends StatefulWidget {

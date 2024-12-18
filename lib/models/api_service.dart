@@ -44,7 +44,7 @@ class APIService {
     try {
       var url = Uri.https(
         'gist.githubusercontent.com',
-        'khanhrukachi/fb28e3b770ad5e70dafcac5a830fb94a/raw',
+        '/khanhrukachi/fb28e3b770ad5e70dafcac5a830fb94a/raw/600b7517c88241baf63b5d8381794b896ba3e366/countries.json',
         {'q': '{https}'},
       );
       final response = await http.get(url);
@@ -68,7 +68,7 @@ class APIService {
     try {
       var url = Uri.https(
         'gist.githubusercontent.com',
-        '/khanhrukachi/fac7fb2d7986e6dc436845760b49e9f6/raw',
+        '/khanhrukachi/fac7fb2d7986e6dc436845760b49e9f6/raw/66cf4246376c22534f684fbf7037424a7443ffcc/currency-symbols.json',
         {'q': '{https}'},
       );
       final response = await http.get(url);

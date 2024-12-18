@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/features/view_spending/view_image.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';

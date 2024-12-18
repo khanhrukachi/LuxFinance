@@ -14,21 +14,21 @@ import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/features/main/profile/about_page.dart';
+import 'package:personal_financial_management/features/main/profile/about_screen.dart';
 import 'package:personal_financial_management/features/main/profile/change_password.dart';
 import 'package:personal_financial_management/features/main/profile/currency_exchange_rate.dart';
-import 'package:personal_financial_management/features/main/profile/history_page.dart';
+import 'package:personal_financial_management/features/main/profile/history_screen.dart';
 import 'package:personal_financial_management/features/main/profile/widget/info_widget.dart';
 import 'package:personal_financial_management/features/main/profile/widget/setting_item.dart';
-import 'package:personal_financial_management/features/setting/bloc/setting_cubit.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/bloc/setting_cubit.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:personal_financial_management/features/main/profile/edit_profile_page.dart';
+import 'package:personal_financial_management/features/main/profile/edit_profile_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);

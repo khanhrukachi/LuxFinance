@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/forgot/forgot_page.dart';
+import 'package:personal_financial_management/features/forgot/forgot_screen.dart';
 import 'package:personal_financial_management/features/login/bloc/login_bloc.dart';
 import 'package:personal_financial_management/features/login/bloc/login_event.dart';
 import 'package:personal_financial_management/features/login/bloc/login_state.dart';
@@ -15,7 +15,7 @@ import 'package:personal_financial_management/features/login/widget/custom_butto
 import 'package:personal_financial_management/features/login/widget/input_password.dart';
 import 'package:personal_financial_management/features/login/widget/input_text.dart';
 import 'package:personal_financial_management/features/login/widget/text_continue.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/features/signup/signup_page.dart';
 
 class LoginForm extends StatefulWidget {

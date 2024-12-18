@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_financial_management/core/constants/app_colors.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'onboarding_body.dart';

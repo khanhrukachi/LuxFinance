@@ -8,7 +8,7 @@ import 'package:personal_financial_management/controls/spending_firebase.dart';
 import 'package:personal_financial_management/features/main/analytic/widget/filter_page.dart';
 import 'package:personal_financial_management/features/main/analytic/widget/my_search_delegate.dart';
 import 'package:personal_financial_management/features/main/home/widget/item_spending_day.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';

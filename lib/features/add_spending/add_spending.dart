@@ -17,7 +17,7 @@ import 'package:personal_financial_management/features/add_spending/widget/item_
 import 'package:personal_financial_management/features/add_spending/widget/more_button.dart';
 import 'package:personal_financial_management/features/add_spending/widget/pick_image_widget.dart';
 import 'package:personal_financial_management/features/add_spending/widget/remove_icon.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
 
 import 'choose_type.dart';

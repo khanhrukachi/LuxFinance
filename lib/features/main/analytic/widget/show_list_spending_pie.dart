@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/features/main/home/view_list_spending_page.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/features/main/home/view_list_spending_screen.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
 
 Widget showListSpendingPie({required List<Spending> list}) {

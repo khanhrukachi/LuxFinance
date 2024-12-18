@@ -1,10 +1,10 @@
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 
 import 'package:flutter/material.dart';
-import 'package:personal_financial_management/features/add_spending/add_friend_page.dart';
+import 'package:personal_financial_management/features/add_spending/add_friend_screen.dart';
 import 'package:personal_financial_management/features/add_spending/widget/circle_text.dart';
 import 'package:personal_financial_management/features/add_spending/widget/remove_icon.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class AddFriend extends StatelessWidget {
   const AddFriend({

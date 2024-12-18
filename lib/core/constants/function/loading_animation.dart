@@ -3,27 +3,23 @@ import 'package:flutter/material.dart';
 void loadingAnimation(BuildContext context) {
   showDialog(
     context: context,
-    barrierDismissible: true, // Allow dismissing by tapping outside
+    barrierDismissible: true,
     builder: (context) {
-      // AnimationController for continuous animation
       return StatefulBuilder(
         builder: (context, setState) {
           return Dialog(
-            backgroundColor: Colors.transparent, // Make the dialog background transparent
-            elevation: 0, // Remove shadow for the dialog
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             child: SizedBox(
               width: 100,
               height: 100,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Remove gradient and use transparent or solid color background
                   Container(
-                    color: Colors.transparent, // You can set a solid color if needed
+                    color: Colors.transparent,
                   ),
-                  // Animated rotating circle using an AnimationController
                   RotationAnimationWidget(),
-                  // Border circle
                   Container(
                     width: 73,
                     height: 73,
@@ -62,7 +58,7 @@ class _RotationAnimationWidgetState extends State<RotationAnimationWidget>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
-    )..repeat(); // Loop the animation indefinitely
+    )..repeat();
   }
 
   @override
@@ -71,7 +67,7 @@ class _RotationAnimationWidgetState extends State<RotationAnimationWidget>
       animation: _controller,
       builder: (context, child) {
         return Transform.rotate(
-          angle: _controller.value * 2 * 3.14159265359, // Rotate over 360 degrees
+          angle: _controller.value * 2 * 3.14159265359,
           child: child,
         );
       },

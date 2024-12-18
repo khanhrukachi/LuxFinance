@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html/dom.dart' as html_parser;
 import 'package:personal_financial_management/core/constants/function/extension.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:personal_financial_management/models/api_service.dart';

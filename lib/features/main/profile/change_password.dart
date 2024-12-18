@@ -6,7 +6,7 @@ import 'package:personal_financial_management/core/constants/function/route_func
 import 'package:personal_financial_management/features/login/widget/custom_button.dart';
 import 'package:personal_financial_management/features/login/widget/input_password.dart';
 import 'package:personal_financial_management/features/main/profile/new_password.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);

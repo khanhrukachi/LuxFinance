@@ -15,7 +15,7 @@ import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/pick_function.dart';
 import 'package:personal_financial_management/features/main/profile/widget/show_birthday.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:shimmer/shimmer.dart';
 import 'package:personal_financial_management/features/signup/gender_widget.dart';

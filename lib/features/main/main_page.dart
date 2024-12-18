@@ -5,12 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 import 'package:personal_financial_management/features/add_spending/add_spending.dart';
-import 'package:personal_financial_management/features/main/analytic/analytic_page.dart';
-import 'package:personal_financial_management/features/main/calendar/calendar_page.dart';
-import 'package:personal_financial_management/features/main/home/home_page.dart';
-import 'package:personal_financial_management/features/main/profile/profile_page.dart';
+import 'package:personal_financial_management/features/main/analytic/analytic_screen.dart';
+import 'package:personal_financial_management/features/main/calendar/calendar_screen.dart';
+import 'package:personal_financial_management/features/main/home/home_screen.dart';
+import 'package:personal_financial_management/features/main/profile/profile_screen.dart';
 import 'package:personal_financial_management/features/main/widget/item_bottom_tab.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);

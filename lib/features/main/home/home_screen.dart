@@ -6,7 +6,7 @@ import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/extension.dart';
 import 'package:personal_financial_management/features/main/home/widget/item_spending_widget.dart';
 import 'package:personal_financial_management/features/main/home/widget/summary_spending.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert' show json;
-import 'package:personal_financial_management/features/setting/localization/app_localizations_delegate.dart';
+
+import 'package:personal_financial_management/setting/localization/app_localizations_delegate.dart';
 
 class AppLocalizations {
   final Locale locale;

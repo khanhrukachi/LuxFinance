@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class CustomTabBar extends StatelessWidget {
   const CustomTabBar({super.key});

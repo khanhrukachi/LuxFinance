@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_financial_management/controls/spending_firebase.dart';
 import 'package:personal_financial_management/core/constants/function/list_categories.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
 
 class InputSpending extends StatefulWidget {

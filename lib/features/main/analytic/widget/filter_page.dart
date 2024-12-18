@@ -5,11 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_financial_management/core/constants/function/pick_function.dart';
 import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/features/add_spending/add_friend_page.dart';
+import 'package:personal_financial_management/features/add_spending/add_friend_screen.dart';
 import 'package:personal_financial_management/features/add_spending/widget/circle_text.dart';
 import 'package:personal_financial_management/features/add_spending/widget/remove_icon.dart';
 import 'package:personal_financial_management/features/main/analytic/widget/item_filter.dart';
-import 'package:personal_financial_management/features/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/filter.dart';
 
 class FilterPage extends StatefulWidget {
