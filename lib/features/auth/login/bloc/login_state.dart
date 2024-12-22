@@ -13,3 +13,6 @@ class LoginErrorState extends LoginState {
   String status;
   LoginErrorState({required this.status});
 }
+
+class LoginLoadingState extends LoginState {}
+

@@ -29,6 +29,7 @@ class CustomTabBar extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
+          indicatorPadding: EdgeInsets.symmetric(horizontal: -25),
           tabs: [
             Tab(text: AppLocalizations.of(context).translate('week')),
             Tab(text: AppLocalizations.of(context).translate('month')),

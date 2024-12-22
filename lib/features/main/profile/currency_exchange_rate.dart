@@ -22,6 +22,7 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
   String selectedValue = "VND";
   Map<String, dynamic> currency = {};
   List<Map<String, dynamic>> listCountry = [];
+  bool isLoading = true;  // Thêm biến trạng thái loading
 
   @override
   void initState() {
@@ -30,10 +31,17 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
     _moneyController.addListener(() => setState(() {}));
     _searchController.addListener(() => setState(() {}));
     APIService.getExchangeRate().then((value) {
-      setState(() => currency = value);
+      setState(() {
+        currency = value;
+        isLoading = false;
+      });
     });
+
     APIService.getCountry().then((value) {
-      setState(() => listCountry = value);
+      setState(() {
+        listCountry = value;
+        isLoading = false;
+      });
     });
   }
 
@@ -70,7 +78,7 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
                   child: TextFormField(
                     controller: _moneyController,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]"))
                     ],
                     textAlign: TextAlign.right,
                     style: const TextStyle(fontSize: 20),
@@ -136,28 +144,35 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
                       dropdownStyleData: DropdownStyleData(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).scaffoldBackgroundColor, // Background color
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.1),
                               blurRadius: 5,
-                              offset: Offset(0, 5), // Position of shadow
+                              offset: Offset(0, 5),
                             ),
                           ],
                         ),
                       ),
                       menuItemStyleData: MenuItemStyleData(
-                        height: 40, // Set item height
+                        height: 40,
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.blue),
+          strokeWidth: 6.0,
+        )
+      )
+          : SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 10),
@@ -173,7 +188,7 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
                   fillColor: Theme.of(context).scaffoldBackgroundColor,
                   border: InputBorder.none,
                   hintText: AppLocalizations.of(context)
-                      .translate('search_by_country_name_or_currency'),
+                      .translate('search_by_currency'),
                   counterText: "",
                   hintStyle: const TextStyle(fontSize: 16),
                   contentPadding: const EdgeInsets.all(10),
@@ -209,113 +224,112 @@ class _CurrencyExchangeRateState extends State<CurrencyExchangeRate> {
       itemBuilder: (context, index) {
         var country = listCountry
             .where((element) =>
-                element["currencyCode"] ==
-                currency.entries.elementAt(index).key)
+        element["currencyCode"] == currency.entries.elementAt(index).key)
             .toList();
         return (check(currency.entries.elementAt(index).key) ||
-                country.isNotEmpty && check(country[0]["countryName"]))
+            country.isNotEmpty && check(country[0]["countryName"]))
             ? Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: IntrinsicHeight(
-                    child: Row(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 40,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (country.isNotEmpty &&
-                                  country[0]["symbol"] != "")
-                                Text(
-                                  html_parser.DocumentFragment.html(
-                                          country[0]["symbol"])
-                                      .text!,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              if (country.isNotEmpty &&
-                                  country[0]["symbol"] != "")
-                                const SizedBox(height: 5),
-                              Text(
-                                currency.entries.elementAt(index).key,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ],
+                        if (country.isNotEmpty &&
+                            country[0]["symbol"] != "")
+                          Text(
+                            html_parser.DocumentFragment.html(
+                                country[0]["symbol"])
+                                .text!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                        if (country.isNotEmpty &&
+                            country[0]["symbol"] != "")
+                          const SizedBox(height: 5),
+                        Text(
+                          currency.entries.elementAt(index).key,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.grey),
                         ),
-                        const SizedBox(width: 5),
-                        const VerticalDivider(
-                            color: Colors.black, thickness: 1),
-                        const SizedBox(width: 5),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${(currency.entries.elementAt(index).value / currency[selectedValue] * int.parse(_moneyController.text.isNotEmpty ? _moneyController.text : "0"))}"
-                                    .formatByTNT(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Flexible(
-                                child: Text(
-                                  "1 $selectedValue ≈ "
-                                  "${"${currency.entries.elementAt(index).value / currency[selectedValue]}".formatByTNT()} "
-                                  "${currency.entries.elementAt(index).key}",
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        CachedNetworkImage(
-                          imageUrl:
-                              "https://countryflagsapi.com/png/${country.isNotEmpty ? country[0]["countryName"] : ""}",
-                          width: 45,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              height: 30,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            height: 30,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withOpacity(0.7),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "N/A",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
-                ),
-              )
+                  const SizedBox(width: 5),
+                  const VerticalDivider(
+                      color: Colors.black, thickness: 1),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${(currency.entries.elementAt(index).value / currency[selectedValue] * int.parse(_moneyController.text.isNotEmpty ? _moneyController.text : "0"))}"
+                              .formatByTNT(),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Flexible(
+                          child: Text(
+                            "1 $selectedValue ≈ "
+                                "${"${currency.entries.elementAt(index).value / currency[selectedValue]}".formatByTNT()} "
+                                "${currency.entries.elementAt(index).key}",
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  CachedNetworkImage(
+                    imageUrl:
+                    "https://countryflagsapi.com/png/${country.isNotEmpty ? country[0]["countryName"] : ""}",
+                    width: 45,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 30,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 30,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.7),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "N/A",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
             : const SizedBox.shrink();
       },
     );

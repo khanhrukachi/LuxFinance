@@ -17,7 +17,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../controls/spending_firebase.dart';
 import '../../models/spending.dart';
 import '../add_spending/widget/circle_text.dart';
-import '../edit_spending/edit_spending_page.dart';
+import '../edit_spending/edit_spending_screen.dart';
 
 class ViewSpendingPage extends StatefulWidget {
   const ViewSpendingPage({

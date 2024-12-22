@@ -165,18 +165,6 @@ class AboutPage extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          InkWell(
-            onTap: () async {
-              var url = 'https://me.momo.vn/khanhrukachi';
-              if (await canLaunchUrlString(url)) {
-                await launchUrlString(
-                  url,
-                  mode: LaunchMode.externalApplication,
-                );
-              }
-            },
-            child: Image.asset("assets/images/buy-me-a-coffee.png", height: 50),
-          ),
           const SizedBox(height: 40),
         ],
       ),

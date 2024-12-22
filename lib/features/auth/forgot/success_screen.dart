@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
-import 'package:personal_financial_management/features/login/widget/custom_button.dart';
+import 'package:personal_financial_management/features/auth/login/widget/custom_button.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class SuccessPage extends StatefulWidget {

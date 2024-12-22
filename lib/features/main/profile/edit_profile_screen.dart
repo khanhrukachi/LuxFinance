@@ -18,7 +18,7 @@ import 'package:personal_financial_management/features/main/profile/widget/show_
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:shimmer/shimmer.dart';
-import 'package:personal_financial_management/features/signup/gender_widget.dart';
+import 'package:personal_financial_management/features/auth/signup/gender_widget.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});

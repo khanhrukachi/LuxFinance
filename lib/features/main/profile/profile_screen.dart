@@ -1,34 +1,30 @@
-import 'dart:io' show Directory, File, Platform;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csv/csv.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:personal_financial_management/core/constants/app_colors.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/features/main/profile/about_screen.dart';
-import 'package:personal_financial_management/features/main/profile/change_password.dart';
-import 'package:personal_financial_management/features/main/profile/currency_exchange_rate.dart';
+import 'package:personal_financial_management/features/auth/change_password/change_password.dart';
+import 'package:personal_financial_management/features/main/profile/export_csv.dart';
+import 'package:personal_financial_management/features/main/profile/language_selector.dart';
+import 'package:personal_financial_management/setting/localization/app_localizations.dart';
+import 'package:personal_financial_management/models/user.dart' as myuser;
+import 'package:intl/intl.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:personal_financial_management/features/main/profile/edit_profile_screen.dart';
 import 'package:personal_financial_management/features/main/profile/history_screen.dart';
+import 'package:personal_financial_management/features/main/profile/currency_exchange_rate.dart';
+import 'package:personal_financial_management/features/main/profile/about_screen.dart';
 import 'package:personal_financial_management/features/main/profile/widget/info_widget.dart';
 import 'package:personal_financial_management/features/main/profile/widget/setting_item.dart';
 import 'package:personal_financial_management/setting/bloc/setting_cubit.dart';
-import 'package:personal_financial_management/setting/localization/app_localizations.dart';
-import 'package:personal_financial_management/models/spending.dart';
-import 'package:personal_financial_management/models/user.dart' as myuser;
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:personal_financial_management/features/main/profile/edit_profile_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -47,8 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     SharedPreferences.getInstance().then((value) {
       setState(() {
-        language = value.getInt('language') ??
-            (Platform.localeName.split('_')[0] == "vi" ? 0 : 1);
+        language = value.getInt('language') ?? (Platform.localeName.split('_')[0] == "vi" ? 0 : 1);
         darkMode = value.getBool("isDark") ?? false;
         loginMethod = value.getBool("login") ?? false;
       });
@@ -69,8 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  myuser.User user =
-                      myuser.User.fromFirebase(snapshot.requireData);
+                  myuser.User user = myuser.User.fromFirebase(snapshot.requireData);
                   return InfoWidget(user: user);
                 }
                 return const InfoWidget();
@@ -98,8 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       if (loginMethod) const SizedBox(height: 20),
                       if (loginMethod)
                         settingItem(
-                          text: AppLocalizations.of(context)
-                              .translate('change_password'),
+                          text: AppLocalizations.of(context).translate('change_password'),
                           action: () {
                             Navigator.of(context).push(createRoute(
                               screen: const ChangePassword(),
@@ -111,8 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       const SizedBox(height: 20),
                       settingItem(
-                        text:
-                            AppLocalizations.of(context).translate('language'),
+                        text: AppLocalizations.of(context).translate('language'),
                         action: _showBottomSheet,
                         icon: Icons.translate_outlined,
                         color: const Color.fromRGBO(218, 165, 32, 1),
@@ -142,11 +134,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 60,
                             value: darkMode,
                             onToggle: (value) async {
-                              BlocProvider.of<SettingCubit>(context)
-                                  .changeTheme();
+                              BlocProvider.of<SettingCubit>(context).changeTheme();
                               setState(() => darkMode = value);
-                              final prefs =
-                                  await SharedPreferences.getInstance();
+                              final prefs = await SharedPreferences.getInstance();
                               await prefs.setBool('isDark', darkMode);
                             },
                           ),
@@ -166,11 +156,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 20),
                       settingItem(
-                        text:
-                            "${AppLocalizations.of(context).translate('export')} CSV",
+                        text: "${AppLocalizations.of(context).translate('export')} CSV",
                         action: () async {
                           loadingAnimation(context);
-                          await exportCSV();
+                          await ExportCSV.exportCSV(context);
                           if (!mounted) return;
                           Navigator.pop(context);
                         },
@@ -179,8 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 20),
                       settingItem(
-                        text: AppLocalizations.of(context)
-                            .translate('currency_exchange_rate'),
+                        text: AppLocalizations.of(context).translate('currency_exchange_rate'),
                         action: () async {
                           Navigator.of(context).push(createRoute(
                             screen: const CurrencyExchangeRate(),
@@ -245,61 +233,11 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       context: context,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.only(left: 20),
-          width: double.infinity,
-          height: 170,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () async {
-                  changeLanguage(0);
-                },
-                child: Row(
-                  children: [
-                    Image.asset("assets/images/vietnam.png", width: 70),
-                    const Spacer(),
-                    const Text(
-                      "Tiếng Việt",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Radio(
-                      value: 0,
-                      groupValue: language,
-                      onChanged: (value) {
-                        changeLanguage(0);
-                      },
-                    )
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () async {
-                  changeLanguage(1);
-                },
-                child: Row(
-                  children: [
-                    Image.asset("assets/images/english.png", width: 70),
-                    const Spacer(),
-                    const Text(
-                      "English",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Radio(
-                      value: 1,
-                      groupValue: language,
-                      onChanged: (value) {
-                        changeLanguage(1);
-                      },
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+        return LanguageSelector(
+          currentLanguage: language,
+          onLanguageChanged: (lang) async {
+            changeLanguage(lang);
+          },
         );
       },
     );
@@ -320,83 +258,5 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (!mounted) return;
     Navigator.pop(context);
-  }
-
-  Future exportCSV() async {
-    List<Spending> spendingList = [];
-    await FirebaseFirestore.instance
-        .collection("data")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) async {
-      var data = value.data() as Map<String, dynamic>;
-      List<String> listData = [];
-      for (var entry in data.entries) {
-        listData.addAll(
-            (entry.value as List<dynamic>).map((e) => e.toString()).toList());
-      }
-
-      for (var item in listData) {
-        await FirebaseFirestore.instance
-            .collection("spending")
-            .doc(item)
-            .get()
-            .then((value) {
-          spendingList.add(Spending.fromFirebase(value));
-        });
-      }
-    });
-    List<List<dynamic>> rows = [];
-
-    List<dynamic> row = [
-      "money",
-      "type",
-      "note",
-      "date",
-      "image",
-      "location",
-      "friends"
-    ];
-    rows.add(row);
-    for (var item in spendingList) {
-      List<dynamic> row = [];
-      row.add(item.money);
-      if (!mounted) return;
-      row.add(item.type == 41
-          ? item.typeName
-          : AppLocalizations.of(context)
-              .translate(listType[item.type]['title']!));
-      row.add(item.note);
-      row.add(DateFormat("dd/MM/yyyy - HH:mm:ss").format(item.dateTime));
-      row.add(item.image);
-      row.add(item.location);
-      row.add(item.friends);
-      rows.add(row);
-    }
-
-    String csv = const ListToCsvConverter().convert(rows);
-    Directory? directory;
-    try {
-      if (Platform.isIOS) {
-        directory = await getApplicationDocumentsDirectory();
-      } else {
-        directory = Directory('/storage/emulated/0/Download');
-        if (!await directory.exists()) {
-          directory = await getExternalStorageDirectory();
-        }
-      }
-    } catch (_) {}
-
-    String path =
-        "${directory!.path}/TNT_${DateFormat("dd_MM_yyyy_HH_mm_ss").format(DateTime.now())}.csv";
-    File f = File(path);
-    f.writeAsString(csv);
-
-    if (!mounted) return;
-    Fluttertoast.showToast(
-      msg:
-          "${AppLocalizations.of(context).translate('file_successfully_saved')} $path",
-      toastLength: Toast.LENGTH_LONG,
-    );
   }
 }

@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/login/widget/custom_button.dart';
-import 'package:personal_financial_management/features/login/widget/input_password.dart';
-import 'package:personal_financial_management/features/main/profile/new_password.dart';
+import 'package:personal_financial_management/features/auth/login/widget/custom_button.dart';
+import 'package:personal_financial_management/features/auth/login/widget/input_password.dart';
+import 'package:personal_financial_management/features/auth/change_password/new_password.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class ChangePassword extends StatefulWidget {

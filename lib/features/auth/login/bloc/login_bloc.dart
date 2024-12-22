@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_financial_management/features/login/bloc/login_event.dart';
-import 'package:personal_financial_management/features/login/bloc/login_state.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_event.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_state.dart';
 
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:shared_preferences/shared_preferences.dart';

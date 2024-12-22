@@ -10,23 +10,26 @@ class APIService {
 
   static Future<Map<String, dynamic>> getExchangeRate() async {
     try {
-      var url = Uri.https('api.exchangerate.host', '/latest', {'q': '{https}'});
+      // Sửa URL API tại đây
+      var url = Uri.https('api.exchangerate-api.com', '/v4/latest/USD');
       final response = await http.get(url);
+
       if (response.statusCode == 200) {
         return compute(parseExchangeRate, response.body);
       } else {
-        throw Exception('Failed to load json data');
+        throw Exception('Failed to load exchange rate data');
       }
-    } catch (_) {}
-    return {};
+    } catch (e) {
+      print("Error fetching exchange rates: $e");
+      return {};
+    }
   }
 
-  static Future<List<Map<String, dynamic>>> parseCountry(
-      String responseBody) async {
+  static Future<List<Map<String, dynamic>>> parseCountry(String responseBody) async {
     var data = json.decode(responseBody) as Map<String, dynamic>;
     var listSymbol = await getSymbolCurrency();
     List<Map<String, dynamic>> list =
-        (data["countries"]["country"] as List<dynamic>).map((e) {
+    (data["countries"]["country"] as List<dynamic>).map((e) {
       Map<String, dynamic> item = {};
       var symbol = listSymbol
           .where((element) => element["abbreviation"] == e["currencyCode"])
@@ -48,19 +51,22 @@ class APIService {
         {'q': '{https}'},
       );
       final response = await http.get(url);
+
       if (response.statusCode == 200) {
         return compute(parseCountry, response.body);
       } else {
-        throw Exception('Failed to load json data');
+        throw Exception('Failed to load country data');
       }
-    } catch (_) {}
-    return [];
+    } catch (e) {
+      print("Error fetching country data: $e");
+      return [];
+    }
   }
 
   static List<Map<String, dynamic>> parseSymbolCurrency(String responseBody) {
     var data = json.decode(responseBody) as List<dynamic>;
     List<Map<String, dynamic>> list =
-        data.map((e) => e as Map<String, dynamic>).toList();
+    data.map((e) => e as Map<String, dynamic>).toList();
     return list;
   }
 
@@ -68,16 +74,19 @@ class APIService {
     try {
       var url = Uri.https(
         'gist.githubusercontent.com',
-        '/khanhrukachi/fac7fb2d7986e6dc436845760b49e9f6/raw/66cf4246376c22534f684fbf7037424a7443ffcc/currency-symbols.json',
+        '/khanhrukachi/fac7fb2d7986e6dc436845760b49e9f6/raw/b57fd2afdd192f046655afb4d9f0c57cf9dae655/currency-symbols.json',
         {'q': '{https}'},
       );
       final response = await http.get(url);
+
       if (response.statusCode == 200) {
         return compute(parseSymbolCurrency, response.body);
       } else {
-        throw Exception('Failed to load json data');
+        throw Exception('Failed to load symbol data');
       }
-    } catch (_) {}
-    return [];
+    } catch (e) {
+      print("Error fetching symbol data: $e");
+      return [];
+    }
   }
 }

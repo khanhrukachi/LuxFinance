@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
-import 'package:personal_financial_management/features/signup/bloc/signup_bloc.dart';
-import 'package:personal_financial_management/features/signup/signup_form.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_bloc.dart';
+import 'package:personal_financial_management/features/auth/login/login_form.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _LoginPageState extends State<LoginPage> {
   DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: AppColors.whisperBackground,
       body: WillPopScope(
         onWillPop: () => onWillPop(
           action: (now) => currentBackPressTime = now,
@@ -24,8 +25,8 @@ class _SignupPageState extends State<SignupPage> {
         ),
         child: SafeArea(
           child: BlocProvider(
-            create: (context) => SignupBloc(),
-            child: const SignupForm(),
+            create: (context) => LoginBloc(),
+            child: const LoginForm(),
           ),
         ),
       ),

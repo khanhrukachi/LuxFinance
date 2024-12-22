@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:personal_financial_management/features/signup/bloc/signup_event.dart';
-import 'package:personal_financial_management/features/signup/bloc/singup_state.dart';
+import 'package:personal_financial_management/features/auth/signup/bloc/signup_event.dart';
+import 'package:personal_financial_management/features/auth/signup/bloc/singup_state.dart';
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:shared_preferences/shared_preferences.dart';
 

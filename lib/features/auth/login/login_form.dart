@@ -7,16 +7,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/forgot/forgot_screen.dart';
-import 'package:personal_financial_management/features/login/bloc/login_bloc.dart';
-import 'package:personal_financial_management/features/login/bloc/login_event.dart';
-import 'package:personal_financial_management/features/login/bloc/login_state.dart';
-import 'package:personal_financial_management/features/login/widget/custom_button.dart';
-import 'package:personal_financial_management/features/login/widget/input_password.dart';
-import 'package:personal_financial_management/features/login/widget/input_text.dart';
-import 'package:personal_financial_management/features/login/widget/text_continue.dart';
+import 'package:personal_financial_management/features/auth/forgot/forgot_screen.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_bloc.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_event.dart';
+import 'package:personal_financial_management/features/auth/login/bloc/login_state.dart';
+import 'package:personal_financial_management/features/auth/login/widget/custom_button.dart';
+import 'package:personal_financial_management/features/auth/login/widget/input_password.dart';
+import 'package:personal_financial_management/features/auth/login/widget/input_text.dart';
+import 'package:personal_financial_management/features/auth/login/widget/text_continue.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
-import 'package:personal_financial_management/features/signup/signup_page.dart';
+import 'package:personal_financial_management/features/auth/signup/signup_page.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -65,11 +65,11 @@ class _LoginFormState extends State<LoginForm> {
 
         if (state is LoginErrorState && check) {
           Navigator.pop(context);
-          Fluttertoast.showToast(
-              msg: AppLocalizations.of(context).translate(state.status));
+          String errorMessage = AppLocalizations.of(context).translate('unknown_error_login');
+          Fluttertoast.showToast(msg: errorMessage);
         }
-        check = true;
 
+        check = true;
         return Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -134,7 +134,6 @@ class _LoginFormState extends State<LoginForm> {
                             password: _passwordController.text.trim(),
                           ),
                         );
-                        return;
                       }
                     },
                     text: AppLocalizations.of(context).translate('sign_in'),
@@ -150,8 +149,9 @@ class _LoginFormState extends State<LoginForm> {
                           height: 50,
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              BlocProvider.of<LoginBloc>(context)
-                                  .add(LoginWithGoogleEvent());
+                              loadingAnimation(context);
+
+                              BlocProvider.of<LoginBloc>(context).add(LoginWithGoogleEvent());
                             },
                             icon: Image.asset(
                               "assets/logo/google_logo.png",
@@ -177,8 +177,9 @@ class _LoginFormState extends State<LoginForm> {
                           height: 50,
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              BlocProvider.of<LoginBloc>(context)
-                                  .add(LoginWithFacebookEvent());
+                              loadingAnimation(context);
+
+                              BlocProvider.of<LoginBloc>(context).add(LoginWithFacebookEvent());
                             },
                             icon: const Icon(FontAwesomeIcons.facebook),
                             label: const Text(
@@ -187,7 +188,7 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  const Color.fromRGBO(66, 103, 178, 1),
+                              const Color.fromRGBO(66, 103, 178, 1),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

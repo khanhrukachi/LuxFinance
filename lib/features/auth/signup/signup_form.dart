@@ -6,16 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/login/login_screen.dart';
-import 'package:personal_financial_management/features/login/widget/custom_button.dart';
-import 'package:personal_financial_management/features/login/widget/input_password.dart';
-import 'package:personal_financial_management/features/login/widget/input_text.dart';
+import 'package:personal_financial_management/features/auth/login/login_page.dart';
+import 'package:personal_financial_management/features/auth/login/widget/custom_button.dart';
+import 'package:personal_financial_management/features/auth/login/widget/input_password.dart';
+import 'package:personal_financial_management/features/auth/login/widget/input_text.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
-import 'package:personal_financial_management/features/signup/bloc/signup_bloc.dart';
-import 'package:personal_financial_management/features/signup/bloc/signup_event.dart';
-import 'package:personal_financial_management/features/signup/bloc/singup_state.dart';
-import 'package:personal_financial_management/features/signup/gender_widget.dart';
-import 'package:personal_financial_management/features/signup/verify/verify_page.dart';
+import 'package:personal_financial_management/features/auth/signup/bloc/signup_bloc.dart';
+import 'package:personal_financial_management/features/auth/signup/bloc/signup_event.dart';
+import 'package:personal_financial_management/features/auth/signup/bloc/singup_state.dart';
+import 'package:personal_financial_management/features/auth/signup/gender_widget.dart';
+import 'package:personal_financial_management/features/auth/signup/verify/verify_screen.dart';
 import 'package:personal_financial_management/models/user.dart';
 
 
