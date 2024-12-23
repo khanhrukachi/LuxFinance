@@ -74,11 +74,11 @@ class _FilterPageState extends State<FilterPage> {
                 money: moneyController.text.isEmpty
                     ? 0
                     : int.parse(
-                        moneyController.text.replaceAll(RegExp(r'[^0-9]'), '')),
+                    moneyController.text.replaceAll(RegExp(r'[^0-9]'), '')),
                 finishMoney: finishMoneyController.text.isEmpty
                     ? 0
                     : int.parse(finishMoneyController.text
-                        .replaceAll(RegExp(r'[^0-9]'), '')),
+                    .replaceAll(RegExp(r'[^0-9]'), '')),
                 note: noteController.text,
               ));
               Navigator.pop(context);
@@ -90,112 +90,113 @@ class _FilterPageState extends State<FilterPage> {
           )
         ],
       ),
-      body: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ItemFilter(
-                text: AppLocalizations.of(context).translate('money'),
-                value: filter.chooseIndex[0] == 0
-                    ? AppLocalizations.of(context)
-                        .translate(moneyList[filter.chooseIndex[0]])
-                    : (filter.chooseIndex[0] == 3
-                        ? "${moneyController.text} - ${finishMoneyController.text}"
-                        : "${AppLocalizations.of(context).translate(moneyList[filter.chooseIndex[0]])} ${moneyController.text.isNotEmpty ? moneyController.text : numberFormat.format(filter.money)}"),
-                list: moneyList,
-                action: (value) async {
-                  if (value != 0 && value != 3) {
-                    await inputMoney(index: value);
-                  } else if (value == 3) {
-                    await inputMoney(check: true, index: value);
-                  } else {
-                    setState(() => filter.chooseIndex[0] = 0);
-                  }
-                },
-              ),
-              line(),
-              ItemFilter(
-                text: AppLocalizations.of(context).translate('time'),
-                value: filter.chooseIndex[1] == 0
-                    ? AppLocalizations.of(context)
-                        .translate(timeList[filter.chooseIndex[1]])
-                    : (filter.chooseIndex[1] == 3
-                        ? "${DateFormat("dd/MM/yyyy").format(filter.time!)} - ${DateFormat("dd/MM/yyyy").format(filter.finishTime!)}"
-                        : "${AppLocalizations.of(context).translate(timeList[filter.chooseIndex[1]])} ${DateFormat("dd/MM/yyyy").format(filter.time!)}"),
-                list: timeList,
-                action: (value) async {
-                  if (value != 0 && value != 3) {
-                    DateTime? picker = await selectDate(
-                      context: context,
-                      initialDate: DateTime.now(),
-                    );
-                    if (picker != null) {
-                      filter.time = picker;
+      body: SingleChildScrollView(
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                ItemFilter(
+                  text: AppLocalizations.of(context).translate('money'),
+                  value: filter.chooseIndex[0] == 0
+                      ? AppLocalizations.of(context)
+                      .translate(moneyList[filter.chooseIndex[0]])
+                      : (filter.chooseIndex[0] == 3
+                      ? "${moneyController.text} - ${finishMoneyController.text}"
+                      : "${AppLocalizations.of(context).translate(moneyList[filter.chooseIndex[0]])} ${moneyController.text.isNotEmpty ? moneyController.text : numberFormat.format(filter.money)}"),
+                  list: moneyList,
+                  action: (value) async {
+                    if (value != 0 && value != 3) {
+                      await inputMoney(index: value);
+                    } else if (value == 3) {
+                      await inputMoney(check: true, index: value);
+                    } else {
+                      setState(() => filter.chooseIndex[0] = 0);
+                    }
+                  },
+                ),
+                line(),
+                ItemFilter(
+                  text: AppLocalizations.of(context).translate('time'),
+                  value: filter.chooseIndex[1] == 0
+                      ? AppLocalizations.of(context)
+                      .translate(timeList[filter.chooseIndex[1]])
+                      : (filter.chooseIndex[1] == 3
+                      ? "${DateFormat("dd/MM/yyyy").format(filter.time!)} - ${DateFormat("dd/MM/yyyy").format(filter.finishTime!)}"
+                      : "${AppLocalizations.of(context).translate(timeList[filter.chooseIndex[1]])} ${DateFormat("dd/MM/yyyy").format(filter.time!)}"),
+                  list: timeList,
+                  action: (value) async {
+                    if (value != 0 && value != 3) {
+                      DateTime? picker = await selectDate(
+                        context: context,
+                        initialDate: DateTime.now(),
+                      );
+                      if (picker != null) {
+                        filter.time = picker;
+                        setState(() => filter.chooseIndex[1] = value);
+                      }
+                    } else if (value == 3) {
+                      await pickDateRange();
+                    } else {
                       setState(() => filter.chooseIndex[1] = value);
                     }
-                  } else if (value == 3) {
-                    await pickDateRange();
-                  } else {
-                    setState(() => filter.chooseIndex[1] = value);
-                  }
-                },
-              ),
-              line(),
-              const SizedBox(height: 10),
-              findFriend(),
-              const SizedBox(height: 10),
-              line(),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 70,
-                    child: Text(
-                      AppLocalizations.of(context).translate('note'),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: noteController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        hintStyle: const TextStyle(fontSize: 16),
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        hintText:
-                            AppLocalizations.of(context).translate('note'),
-                        contentPadding: const EdgeInsets.all(0),
+                  },
+                ),
+                line(),
+                const SizedBox(height: 10),
+                findFriend(),
+                const SizedBox(height: 10),
+                line(),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 70,
+                      child: Text(
+                        AppLocalizations.of(context).translate('note'),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              line(),
-              ItemFilter(
-                text: AppLocalizations.of(context).translate('group'),
-                value: AppLocalizations.of(context)
-                    .translate(groupList[filter.chooseIndex[2]]),
-                list: groupList,
-                action: (value) {
-                  setState(() => filter.chooseIndex[2] = value);
-                },
-              ),
-            ],
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        controller: noteController,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          hintStyle: const TextStyle(fontSize: 16),
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          hintText:
+                          AppLocalizations.of(context).translate('note'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                line(),
+                ItemFilter(
+                  text: AppLocalizations.of(context).translate('group'),
+                  value: AppLocalizations.of(context)
+                      .translate(groupList[filter.chooseIndex[2]]),
+                  list: groupList,
+                  action: (value) {
+                    setState(() => filter.chooseIndex[2] = value);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

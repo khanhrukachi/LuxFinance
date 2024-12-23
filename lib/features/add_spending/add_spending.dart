@@ -298,12 +298,18 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
         moneyString.isNotEmpty &&
         moneyString.compareTo("0") != 0) {
       int money = int.parse(moneyString);
+
+      String typeName = '';
+      if (type! >= 0 && type! < listType.length) {
+        typeName = listType[type!]['title'] ?? '';
+      }
+
       Spending spending = Spending(
         money: type == 41
             ? coefficient * money
             : ([29, 30, 34, 36, 37, 40].contains(type!) ? 1 : -1) * money,
         type: type!,
-        typeName: typeName != null ? typeName!.trim() : typeName,
+        typeName: typeName.trim(),  // Use the fetched typeName
         dateTime: DateTime(
           selectedDate.year,
           selectedDate.month,
@@ -316,6 +322,7 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
         location: _location.text.trim(),
         friends: friends,
       );
+
       loadingAnimation(context);
       await SpendingFirebase.addSpending(spending);
       if (!mounted) return;
@@ -326,8 +333,7 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
           msg: AppLocalizations.of(context).translate('please_select_type'));
     } else {
       Fluttertoast.showToast(
-        msg:
-            AppLocalizations.of(context).translate('please_enter_valid_amount'),
+        msg: AppLocalizations.of(context).translate('please_enter_valid_amount'),
       );
     }
   }

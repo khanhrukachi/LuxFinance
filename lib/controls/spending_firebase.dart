@@ -92,7 +92,6 @@ class SpendingFirebase {
         firestoreData
             .update({DateFormat("MM_yyyy").format(oldDay): dataSpending});
 
-        // thêm id vào tháng mới
         if (data[DateFormat("MM_yyyy").format(spending.dateTime)] != null) {
           dataSpending = (data[DateFormat("MM_yyyy").format(spending.dateTime)]
                   as List<dynamic>)

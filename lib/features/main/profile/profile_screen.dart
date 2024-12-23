@@ -13,12 +13,12 @@ import 'package:personal_financial_management/core/constants/function/route_func
 import 'package:personal_financial_management/features/auth/change_password/change_password.dart';
 import 'package:personal_financial_management/features/main/profile/export_csv.dart';
 import 'package:personal_financial_management/features/main/profile/language_selector.dart';
+import 'package:personal_financial_management/features/main/profile/view_profile_screen.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/user.dart' as myuser;
 import 'package:intl/intl.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:personal_financial_management/features/main/profile/edit_profile_screen.dart';
 import 'package:personal_financial_management/features/main/profile/history_screen.dart';
 import 'package:personal_financial_management/features/main/profile/currency_exchange_rate.dart';
 import 'package:personal_financial_management/features/main/profile/about_screen.dart';
@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         text: AppLocalizations.of(context).translate('account'),
                         action: () {
                           Navigator.of(context).push(createRoute(
-                            screen: const EditProfilePage(),
+                            screen: const UserProfilePage(),
                             begin: const Offset(1, 0),
                           ));
                         },

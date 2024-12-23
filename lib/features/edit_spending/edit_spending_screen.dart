@@ -359,20 +359,28 @@ class _EditSpendingPageState extends State<EditSpendingPage> {
       indent: 10,
     );
   }
-
   Future updateSpending() async {
     String moneyString = _money.text.replaceAll(RegExp(r'[^0-9]'), '');
     if (type != null &&
         moneyString.isNotEmpty &&
         moneyString.compareTo("0") != 0) {
       int money = int.parse(moneyString);
+
+      // Ensure that type is a valid index and exists in listType
+      String typeName = '';
+      if (type! >= 0 && type! < listType.length) {
+        typeName =
+            listType[type!]['title'] ?? ''; // Fetch the 'title' for the type
+      }
+
       Spending spending = Spending(
         id: widget.spending.id,
         money: type == 41
             ? coefficient * money
             : ([29, 30, 34, 36, 37, 40].contains(type!) ? 1 : -1) * money,
         type: type!,
-        typeName: typeName != null ? typeName!.trim() : typeName,
+        typeName: typeName.trim(),
+        // Use the fetched typeName
         dateTime: DateTime(
           selectedDate.year,
           selectedDate.month,
@@ -382,19 +390,24 @@ class _EditSpendingPageState extends State<EditSpendingPage> {
         ),
         note: _note.text.trim(),
         image: widget.spending.image,
+        // Keep the original image if not updated
         location: _location.text.trim(),
         friends: friends,
       );
+
       loadingAnimation(context);
       await SpendingFirebase.updateSpending(
         spending,
         widget.spending.dateTime,
-        image != null ? File(image!.path) : null,
+        image != null ? File(image!.path) : null, // Update image if selected
         checkPickImage,
       );
+
+      // Call the change callback if provided
       if (widget.change != null) {
         widget.change!(spending, colors);
       }
+
       if (!mounted) return;
       Navigator.pop(context);
       Navigator.pop(context);
@@ -404,7 +417,7 @@ class _EditSpendingPageState extends State<EditSpendingPage> {
     } else {
       Fluttertoast.showToast(
         msg:
-            AppLocalizations.of(context).translate('please_enter_valid_amount'),
+        AppLocalizations.of(context).translate('please_enter_valid_amount'),
       );
     }
   }

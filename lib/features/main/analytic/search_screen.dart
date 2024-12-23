@@ -12,6 +12,7 @@ import 'package:personal_financial_management/setting/localization/app_localizat
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:diacritic/diacritic.dart';  // Add the diacritic package for normalization
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -32,11 +33,19 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  // Normalize text by removing diacritics (accents)
+  String normalizeText(String text) {
+    return removeDiacritics(text).toLowerCase();
+  }
+
   bool checkResult(Spending spending) {
-    if (!AppLocalizations.of(context)
-        .translate(listType[spending.type]["title"]!)
-        .toUpperCase()
-        .contains(query!.toUpperCase())) return false;
+    // Normalize both the search query and the spending type text
+    if (query != null && query!.isNotEmpty &&
+        !normalizeText(AppLocalizations.of(context)
+            .translate(listType[spending.type]["title"]!))
+            .contains(normalizeText(query!))) {
+      return false;
+    }
 
     if (filter.chooseIndex[0] == 1 && spending.money.abs() < filter.money) {
       return false;
@@ -94,6 +103,7 @@ class _SearchPageState extends State<SearchPage> {
         elevation: 2,
         title: TextField(
           controller: _searchController,
+          textInputAction: TextInputAction.search,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: AppLocalizations.of(context).translate('search'),
@@ -106,8 +116,15 @@ class _SearchPageState extends State<SearchPage> {
                 q: _searchController.text,
               ),
             );
+            if (query != null) {
+              setState(() {
+                _searchController.text = query!;
+              });
+            }
+          },
+          onSubmitted: (value) {
             setState(() {
-              _searchController.text = query!;
+              query = value.trim();
             });
           },
         ),
@@ -138,42 +155,42 @@ class _SearchPageState extends State<SearchPage> {
       body: query == null
           ? Container()
           : FutureBuilder(
-              future: firestore.FirebaseFirestore.instance
-                  .collection("data")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  var data =
-                      snapshot.requireData.data() as Map<String, dynamic>;
-                  List<String> list = [];
-                  for (var element in data.entries) {
-                    list.addAll((element.value as List<dynamic>)
-                        .map((e) => e.toString())
-                        .toList());
-                  }
-                  return FutureBuilder(
-                      future: SpendingFirebase.getSpendingList(list),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          var spendingList = snapshot.data;
-                          var list = spendingList!.where(checkResult).toList();
-                          if (list.isEmpty) {
-                            return Center(
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('nothing_here'),
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                            );
-                          }
-                          return ItemSpendingDay(spendingList: list);
-                        }
-                        return const Center(child: CircularProgressIndicator());
-                      });
-                }
-                return const Center(child: CircularProgressIndicator());
-              }),
+          future: firestore.FirebaseFirestore.instance
+              .collection("data")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var data =
+              snapshot.requireData.data() as Map<String, dynamic>;
+              List<String> list = [];
+              for (var element in data.entries) {
+                list.addAll((element.value as List<dynamic>)
+                    .map((e) => e.toString())
+                    .toList());
+              }
+              return FutureBuilder(
+                  future: SpendingFirebase.getSpendingList(list),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var spendingList = snapshot.data;
+                      var list = spendingList!.where(checkResult).toList();
+                      if (list.isEmpty) {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .translate('nothing_here'),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        );
+                      }
+                      return ItemSpendingDay(spendingList: list);
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  });
+            }
+            return const Center(child: CircularProgressIndicator());
+          }),
     );
   }
 }

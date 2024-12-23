@@ -10,6 +10,7 @@ import 'package:personal_financial_management/features/auth/signup/verify/input_
 import 'package:personal_financial_management/features/auth/signup/verify/verify_screen.dart';
 import 'package:personal_financial_management/features/main/home/home_screen.dart';
 import 'package:personal_financial_management/features/main/main_page.dart';
+import 'package:personal_financial_management/features/main/profile/edit_profile_screen.dart';
 import 'package:personal_financial_management/features/onboarding/onboarding_screen.dart';
 import 'package:personal_financial_management/setting/bloc/setting_cubit.dart';
 import 'package:personal_financial_management/setting/bloc/setting_state.dart';
@@ -106,6 +107,7 @@ class MyApp extends StatelessWidget {
                 '/success': (context) => const SuccessPage(),
                 '/verify': (context) => const VerifyPage(),
                 '/wallet': (context) => const InputWalletPage(),
+                '/edit_profile': (context) => const EditProfilePage(),
               },
             );
           }),
