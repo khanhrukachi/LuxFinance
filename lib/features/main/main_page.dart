@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:personal_financial_management/core/constants/function/on_will_pop.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
-import 'package:personal_financial_management/features/add_spending/add_spending.dart';
+import 'package:personal_financial_management/features/spending/add_spending/add_spending.dart';
 import 'package:personal_financial_management/features/main/analytic/analytic_screen.dart';
 import 'package:personal_financial_management/features/main/calendar/calendar_screen.dart';
 import 'package:personal_financial_management/features/main/home/home_screen.dart';

@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
-import 'package:personal_financial_management/features/add_spending/widget/circle_text.dart';
-import 'package:personal_financial_management/features/add_spending/widget/remove_icon.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/circle_text.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/remove_icon.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 
 class AddFriendPage extends StatefulWidget {

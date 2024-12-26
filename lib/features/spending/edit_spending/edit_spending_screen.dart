@@ -1,38 +1,47 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_financial_management/controls/spending_firebase.dart';
 import 'package:personal_financial_management/core/constants/app_styles.dart';
 import 'package:personal_financial_management/core/constants/function/loading_animation.dart';
 import 'package:personal_financial_management/core/constants/function/pick_function.dart';
 import 'package:personal_financial_management/core/constants/function/route_function.dart';
 import 'package:personal_financial_management/core/constants/list.dart';
-import 'package:personal_financial_management/controls/spending_firebase.dart';
-import 'package:personal_financial_management/features/add_spending/widget/add_friend.dart';
-import 'package:personal_financial_management/features/add_spending/widget/input_money.dart';
-import 'package:personal_financial_management/features/add_spending/widget/input_spending.dart';
-import 'package:personal_financial_management/features/add_spending/widget/item_spending.dart';
-import 'package:personal_financial_management/features/add_spending/widget/more_button.dart';
-import 'package:personal_financial_management/features/add_spending/widget/pick_image_widget.dart';
-import 'package:personal_financial_management/features/add_spending/widget/remove_icon.dart';
+import 'package:personal_financial_management/features/spending/add_spending/choose_type.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/add_friend.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/input_money.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/input_spending.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/item_spending.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/more_button.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/pick_image_widget.dart';
+import 'package:personal_financial_management/features/spending/add_spending/widget/remove_icon.dart';
 import 'package:personal_financial_management/setting/localization/app_localizations.dart';
 import 'package:personal_financial_management/models/spending.dart';
+import 'package:shimmer/shimmer.dart';
 
-import 'choose_type.dart';
-
-class AddSpendingPage extends StatefulWidget {
-  const AddSpendingPage({Key? key}) : super(key: key);
+class EditSpendingPage extends StatefulWidget {
+  const EditSpendingPage({
+    Key? key,
+    required this.spending,
+    this.change,
+  }) : super(key: key);
+  final Spending spending;
+  final Function(Spending spending, List<Color> colors)? change;
 
   @override
-  State<AddSpendingPage> createState() => _AddSpendingPageState();
+  State<EditSpendingPage> createState() => _EditSpendingPageState();
 }
 
-class _AddSpendingPageState extends State<AddSpendingPage> {
+class _EditSpendingPageState extends State<EditSpendingPage> {
   final _money = TextEditingController();
   final _note = TextEditingController();
   final _location = TextEditingController();
+  final _friend = TextEditingController();
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
   int? type;
@@ -42,27 +51,54 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
   int coefficient = 1;
   List<String> friends = [];
   List<Color> colors = [];
+  bool checkPickImage = false;
 
   @override
   void dispose() {
     _money.dispose();
     _note.dispose();
     _location.dispose();
+    _friend.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _money.text = NumberFormat.currency(locale: "vi_VI")
+        .format(widget.spending.money.abs());
+    _location.text = widget.spending.location ?? "";
+    friends.addAll(widget.spending.friends ?? []);
+    for (var _ in friends) {
+      colors.add(Color.fromRGBO(Random().nextInt(255), Random().nextInt(255),
+          Random().nextInt(255), 1));
+    }
+    if (widget.spending.note != null) {
+      _note.text = widget.spending.note!;
+    }
+    selectedDate = widget.spending.dateTime;
+    selectedTime = TimeOfDay(
+      hour: widget.spending.dateTime.hour,
+      minute: widget.spending.dateTime.minute,
+    );
+    type = widget.spending.type;
+    typeName = widget.spending.typeName;
+    coefficient = widget.spending.money < 0 ? -1 : 1;
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
+        elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
-        title: Text(AppLocalizations.of(context).translate('add_spending')),
+        title: Text(AppLocalizations.of(context).translate('edit_spending')),
         centerTitle: true,
         actions: [
           TextButton(
             onPressed: () async {
-              await addingSpending();
+              await updateSpending();
             },
             child: Text(
               AppLocalizations.of(context).translate('save'),
@@ -83,7 +119,7 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
         child: Column(
           children: [
             addSpending(),
-            if (more) moreFunction(),
+            if (more) moreSpending(),
             MoreButton(
               action: () => setState(() => more = !more),
               more: more,
@@ -125,8 +161,8 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
                               action: (index, coefficient, name) {
                                 setState(() {
                                   type = index;
-                                  typeName = name;
                                   this.coefficient = coefficient;
+                                  typeName = name;
                                 });
                               },
                             ),
@@ -188,7 +224,6 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
                 color: const Color.fromRGBO(221, 96, 0, 1),
                 controller: _note,
                 keyboardType: TextInputType.multiline,
-                textCapitalization: TextCapitalization.sentences,
                 hintText: AppLocalizations.of(context).translate('note'),
               ),
             ],
@@ -198,7 +233,7 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
     );
   }
 
-  Widget moreFunction() {
+  Widget moreSpending() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -253,33 +288,66 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: image == null
+      child: image == null && (widget.spending.image == null || checkPickImage)
           ? pickImageWidget(image: (file) {
               if (file != null) {
                 setState(() => image = file);
               }
             })
-          : Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Image.file(
-                    File(image!.path),
-                    width: double.infinity,
-                    fit: BoxFit.fitWidth,
-                  ),
+          : showImage(),
+    );
+  }
+
+  Widget showImage() {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              if (image != null)
+                Image.file(
+                  File(image!.path),
+                  width: double.infinity,
+                  fit: BoxFit.fitWidth,
                 ),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: removeIcon(
-                    background: Colors.red.withOpacity(0.8),
-                    color: Colors.white,
-                    action: () => setState(() => image = null),
+              if (image == null &&
+                  widget.spending.image != null &&
+                  !checkPickImage)
+                CachedNetworkImage(
+                  imageUrl: widget.spending.image!,
+                  width: double.infinity,
+                  fit: BoxFit.fitWidth,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      height: 150,
+                      width: double.infinity,
+                      color: Colors.grey,
+                    ),
                   ),
-                )
-              ],
-            ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 5,
+          right: 5,
+          child: removeIcon(
+            background: Colors.red.withOpacity(0.8),
+            color: Colors.white,
+            action: () => setState(() {
+              if (checkPickImage) {
+                image = null;
+              } else {
+                checkPickImage = true;
+              }
+            }),
+          ),
+        )
+      ],
     );
   }
 
@@ -291,25 +359,28 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
       indent: 10,
     );
   }
-
-  Future addingSpending() async {
+  Future updateSpending() async {
     String moneyString = _money.text.replaceAll(RegExp(r'[^0-9]'), '');
     if (type != null &&
         moneyString.isNotEmpty &&
         moneyString.compareTo("0") != 0) {
       int money = int.parse(moneyString);
 
+      // Ensure that type is a valid index and exists in listType
       String typeName = '';
       if (type! >= 0 && type! < listType.length) {
-        typeName = listType[type!]['title'] ?? '';
+        typeName =
+            listType[type!]['title'] ?? ''; // Fetch the 'title' for the type
       }
 
       Spending spending = Spending(
+        id: widget.spending.id,
         money: type == 41
             ? coefficient * money
             : ([29, 30, 34, 36, 37, 40].contains(type!) ? 1 : -1) * money,
         type: type!,
-        typeName: typeName.trim(),  // Use the fetched typeName
+        typeName: typeName.trim(),
+        // Use the fetched typeName
         dateTime: DateTime(
           selectedDate.year,
           selectedDate.month,
@@ -318,13 +389,25 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
           selectedTime.minute,
         ),
         note: _note.text.trim(),
-        image: image != null ? image!.path : null,
+        image: widget.spending.image,
+        // Keep the original image if not updated
         location: _location.text.trim(),
         friends: friends,
       );
 
       loadingAnimation(context);
-      await SpendingFirebase.addSpending(spending);
+      await SpendingFirebase.updateSpending(
+        spending,
+        widget.spending.dateTime,
+        image != null ? File(image!.path) : null, // Update image if selected
+        checkPickImage,
+      );
+
+      // Call the change callback if provided
+      if (widget.change != null) {
+        widget.change!(spending, colors);
+      }
+
       if (!mounted) return;
       Navigator.pop(context);
       Navigator.pop(context);
@@ -333,7 +416,8 @@ class _AddSpendingPageState extends State<AddSpendingPage> {
           msg: AppLocalizations.of(context).translate('please_select_type'));
     } else {
       Fluttertoast.showToast(
-        msg: AppLocalizations.of(context).translate('please_enter_valid_amount'),
+        msg:
+        AppLocalizations.of(context).translate('please_enter_valid_amount'),
       );
     }
   }
