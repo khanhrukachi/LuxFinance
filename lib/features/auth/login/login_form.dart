@@ -171,31 +171,6 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 30),
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              loadingAnimation(context);
-
-                              BlocProvider.of<LoginBloc>(context).add(LoginWithFacebookEvent());
-                            },
-                            icon: const Icon(FontAwesomeIcons.facebook),
-                            label: const Text(
-                              "Facebook",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                              const Color.fromRGBO(66, 103, 178, 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),

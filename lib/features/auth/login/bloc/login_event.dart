@@ -8,5 +8,3 @@ class LoginWithEmailPasswordEvent extends LoginEvent {
 }
 
 class LoginWithGoogleEvent extends LoginEvent {}
-
-class LoginWithFacebookEvent extends LoginEvent {}

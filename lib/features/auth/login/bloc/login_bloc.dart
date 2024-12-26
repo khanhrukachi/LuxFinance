@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_financial_management/features/auth/login/bloc/login_event.dart';
@@ -39,20 +38,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginErrorState(status: _status));
       }
     });
-
-    on<LoginWithFacebookEvent>((event, emit) async {
-      bool check = await signInWithFacebook();
-      if (check) {
-        SharedPreferences.getInstance().then((value) {
-          value.setBool("login", false);
-        });
-        bool check = await initInfoUser();
-        emit(LoginSuccessState(
-            social: check ? Social.facebook : Social.newUser));
-      } else {
-        emit(LoginErrorState(status: _status));
-      }
-    });
   }
 
   Future<UserCredential?> signInWithGoogle() async {
@@ -71,19 +56,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     return null;
-  }
-
-  Future<bool> signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    if (loginResult.accessToken != null) {
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
-      await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-      return true;
-    }
-
-    return false;
   }
 
   Future<bool> signInWithEmailAndPassword(
